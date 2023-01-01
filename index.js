@@ -14,7 +14,7 @@ const oauth2Client = new google.auth.OAuth2(
 	process.env.REDIRECT_URL
 );
 const scopes = ['https://www.googleapis.com/auth/youtube.readonly'];
-console.log(process.env.REDIRECT_URL);
+
 app.get('/freeGames', (req, res) => {
 	const rssUrl = 'https://steamcommunity.com/groups/freegamesfinders/rss/';
 
@@ -118,7 +118,7 @@ app.get('/getVideos', (request, response) => {
 		youtube.playlistItems.list(
 			{
 				auth: oauth2Client,
-				part: 'contentDetails',
+				part: 'contentDetails, snippet',
 				maxResults: 50,
 				playlistId: 'PL278kIbxfIKfRyGZjwEx8rJfsICfbrNZi',
 				pageToken: pageToken,
@@ -130,7 +130,10 @@ app.get('/getVideos', (request, response) => {
 					return;
 				}
 				res.data.items.forEach((video) =>
-					videos.push(video.contentDetails.videoId)
+					videos.push({
+						title: video.snippet.title,
+						id: video.contentDetails.videoId,
+					})
 				);
 				if (res.data.nextPageToken) fetchVideos(res.data.nextPageToken);
 				else {

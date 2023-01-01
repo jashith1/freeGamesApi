@@ -14,7 +14,7 @@ const oauth2Client = new google.auth.OAuth2(
 	process.env.REDIRECT_URL
 );
 const scopes = ['https://www.googleapis.com/auth/youtube.readonly'];
-
+console.log(process.env.REDIRECT_URL);
 app.get('/freeGames', (req, res) => {
 	const rssUrl = 'https://steamcommunity.com/groups/freegamesfinders/rss/';
 
